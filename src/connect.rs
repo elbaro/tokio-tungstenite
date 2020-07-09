@@ -37,7 +37,7 @@ pub(crate) mod encryption {
         match mode {
             Mode::Plain => Ok(StreamSwitcher::Plain(socket)),
             Mode::Tls => {
-                let try_connector = TlsConnector::new();
+                let try_connector = TlsConnector::builder().danger_accept_invalid_certs(true).build();
                 let connector = try_connector.map_err(Error::Tls)?;
                 let stream = TokioTlsConnector::from(connector);
                 let connected = stream.connect(&domain, socket).await;
